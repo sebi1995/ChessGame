@@ -6,11 +6,18 @@ public class Board {
 
     Board() {
         initBoard(pieces = new Piece[8][8]);
-
-//        pieces[2][2] = pieces[1][2];
-//        pieces[1][2] = null;
     }
 
+    /*
+    R  K  B  Q  KI B  K  R
+    P  P  P  P  P  P  P  P
+    N  N  N  N  N  N  N  N
+    N  N  N  N  N  N  N  N
+    N  N  N  N  N  N  N  N
+    N  N  N  N  N  N  N  N
+    P  P  P  P  P  P  P  P
+    R  K  B  KI Q  B  K  R
+    */
     private void initBoard(Piece[][] pieces) {
         pieces[0][0] = new Rook(0, 0, 0);
         pieces[0][1] = new Knight(0, 1, 0);
@@ -41,7 +48,6 @@ public class Board {
     }
 
     public void printBoard(){
-
         StringBuilder stringBuilder = new StringBuilder();
         int spaces = 8;
 
