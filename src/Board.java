@@ -2,10 +2,20 @@ import Pieces.*;
 
 public class Board {
 
-    private Piece[][] pieces;
+    private Piece[][] board;
+    private StringBuilder stringBuilder;
+    private Player player1, player2;
+    private int turn = 1;
 
-    Board() {
-        initBoard(pieces = new Piece[8][8]);
+    Board(Player player1, Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
+
+        stringBuilder = new StringBuilder();
+
+        initBoard(board = new Piece[8][8]);
+
+        board[5][1] = new Pawn(5, 1, "\033[1;31m");
     }
 
     /*
@@ -18,46 +28,35 @@ public class Board {
     P  P  P  P  P  P  P  P
     R  K  B  KI Q  B  K  R
     */
-    private void initBoard(Piece[][] pieces) {
-        pieces[0][0] = new Rook(0, 0, 0);
-        pieces[0][1] = new Knight(0, 1, 0);
-        pieces[0][2] = new Bishop(0, 2, 0);
-        pieces[0][3] = new Queen(0, 3, 0);
-        pieces[0][4] = new King(0, 4, 0);
-        pieces[0][5] = new Bishop(0, 5, 0);
-        pieces[0][6] = new Knight(0, 6, 0);
-        pieces[0][7] = new Rook(0, 7, 0);
-
-        for (int i = 0; i < 8; ++i) {
-            pieces[1][i] = new Pawn(1, i, 0);
+    private void initBoard(Piece[][] board) {
+        int p1 = 0;
+        for (int i = 6; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                board[i][j] = player1.myPieces.get(p1++);
+            }
         }
-
-        for (int i = 0; i < 8; ++i) {
-            pieces[6][i] = new Pawn(6, i, 1);
+        p1 = 0;
+        for (int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                board[i][j] = player2.myPieces.get(p1++);
+            }
         }
 
 
-        pieces[7][0] = new Rook(7, 0, 1);
-        pieces[7][1] = new Knight(7, 1, 1);
-        pieces[7][2] = new Bishop(7, 2, 1);
-        pieces[7][3] = new Queen(7, 3, 1);
-        pieces[7][4] = new King(7, 4, 1);
-        pieces[7][5] = new Bishop(7, 5, 1);
-        pieces[7][6] = new Knight(7, 6, 1);
-        pieces[7][7] = new Rook(7, 7, 1);
     }
 
-    public void printBoard(){
-        StringBuilder stringBuilder = new StringBuilder();
+    public StringBuilder getBoard() {
+        stringBuilder.delete(0, stringBuilder.length());
         int spaces = 8;
 
         for (int i = 0; i < 8; ++i) {
-            System.out.print((i+1) + "\t");
+            stringBuilder.append(i).append("\t");
 
             for (int j = 0; j < 8; ++j) {
-                if (pieces[i][j] != null){
-                    stringBuilder.append(pieces[i][j].getType());
-                    for (int k = pieces[i][j].getType().toString().length(); k < spaces; ++k) {
+                if (board[i][j] != null) {
+                    stringBuilder.append(board[i][j].getColor()).append(board[i][j].getType()).append("\033[0m");
+
+                    for (int k = board[i][j].getType().toString().length(); k < spaces; ++k) {
                         stringBuilder.append(" ");
                     }
                 } else {
@@ -65,15 +64,23 @@ public class Board {
                         stringBuilder.append(" ");
                     }
                 }
-                System.out.print(stringBuilder);
-                stringBuilder.delete(0, stringBuilder.length());
             }
-            System.out.println();
+            stringBuilder.append("\n");
         }
 
-        System.out.print("\t");
+        stringBuilder.append("\t");
         for (int i = 0; i < 8; ++i) {
-            System.out.print((i+1) + "       ");
+            stringBuilder.append(i).append("       ");
         }
+        return stringBuilder;
+    }
+
+    //    public boolean makeMove(Player player, int x, int startY){
+    public boolean makeMove(Player player, int startY, int startX, int endY, int endX) {
+        if (board[startY][startX].isValidMove(player.getWho(), startY, startX, endY, endX)) {
+            board[endY][endX] = board[startY][startX];
+            board[startY][startX] = null;
+            return true;
+        } else return false;
     }
 }

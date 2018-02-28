@@ -2,12 +2,12 @@ package Pieces;
 
 public class Rook extends Piece {
 
-    public Rook(int x, int y, int color) {
+    public Rook(int x, int y, String color) {
         super(x, y, color);
     }
 
     @Override
-    boolean isValidMove(int x, int y) {
+    public boolean isValidMove(int who, int startY, int startX, int endY, int endX) {
         return false;
     }
 

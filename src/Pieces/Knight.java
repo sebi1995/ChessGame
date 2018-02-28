@@ -2,12 +2,12 @@ package Pieces;
 
 public class Knight extends Piece {
 
-    public Knight(int x, int y, int color) {
+    public Knight(int x, int y, String color) {
         super(x, y, color);
     }
 
     @Override
-    boolean isValidMove(int x, int y) {
+    public boolean isValidMove(int who, int startY, int startX, int endY, int endX) {
         return false;
     }
 
