@@ -7,20 +7,19 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int startY, int startX, int endY, int endX) {
-        int minusSEYY = startY - endY;
-        System.out.println(minusSEYY);
-        int minusSEXX = startX - endX;
-        System.out.println(minusSEXX);
-//System.out.println(board.makeMove(player1,6, 0, 5, 1));
-        if (who == 1){
-            if (minusSEYY == 1 && minusSEXX == 1 &&
-                        minusSEXX > 0 && minusSEYY > 0 &&
-                        minusSEXX < 8 && minusSEYY < 8){
-                return true;
+    public boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX) {
+        if (who == 1) {
+            if (endY >= startY) return false;
+            if (startX == endX) {
+                return !pieceIsOnSpotYX && startY - endY == 1;
+            }
+        } else {
+            if (endY <= startY) return false;
+            if (startX == endX) {
+                return !pieceIsOnSpotYX && endY - startY == 1;
             }
         }
-        return false;
+        return pieceIsOnSpotYX && (endX - startX == 1 || startX - endX == 1);
     }
 
     @Override

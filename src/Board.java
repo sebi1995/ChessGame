@@ -77,10 +77,15 @@ public class Board {
 
     //    public boolean makeMove(Player player, int x, int startY){
     public boolean makeMove(Player player, int startY, int startX, int endY, int endX) {
-        if (board[startY][startX].isValidMove(player.getWho(), startY, startX, endY, endX)) {
+        if (board[startY][startX] == null) return false;
+        if (board[startY][startX].isValidMove(player.getWho(), startY, startX, endY, endX, isPieceOnThatSpot(endY, endX))) {
             board[endY][endX] = board[startY][startX];
             board[startY][startX] = null;
             return true;
         } else return false;
+    }
+
+    private boolean isPieceOnThatSpot(int y, int x){
+        return board[y][x] != null;
     }
 }

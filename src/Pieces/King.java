@@ -7,7 +7,7 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int startY, int startX, int endY, int endX) {
+    public boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX) {
         return false;
     }
 
