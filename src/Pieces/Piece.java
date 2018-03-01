@@ -13,13 +13,8 @@ public abstract class Piece {
         this.color = color;
     }
 
-    //isValidMove checks if the move the user wants to make on the piece is a valid move
-    //if it is, then query the board to make the move, if it isn't reply back to the user with an error.
-    public abstract boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX);
-
-    boolean isValidMove(int startY, int startX) {
-        return false;
-    }
+    //isValidMove checks if the move the user wants to make on the piece is a valid move that the piece can make
+    public abstract boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos);
 
     //get what type of piece this is
     public abstract Type getType();

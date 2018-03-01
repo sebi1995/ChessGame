@@ -7,8 +7,13 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX) {
-        return false;
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
+//        switch (who){
+//            case 1:
+//                if (sX )
+//            case 2:
+//        }
+        return true;
     }
 
     @Override

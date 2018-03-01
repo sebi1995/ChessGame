@@ -7,23 +7,26 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX) {
-        if (who == 1) {
-            if (endY >= startY) return false;
-            if (startX == endX) {
-                return !pieceIsOnSpotYX && startY - endY == 1;
-            }
-        } else {
-            if (endY <= startY) return false;
-            if (startX == endX) {
-                return !pieceIsOnSpotYX && endY - startY == 1;
-            }
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
+        switch (who) {
+            case 1:
+                if (eY >= sY) return false;
+                if (sX == eX) return sY - eY == 1;
+                if (sY - eY == 1 && (sX - 1 == eX || sX + 1 == eX)) return true;
+            case 2:
+                if (eY <= sY) return false;
+                if (sX == eX) return eY - sY == 1;
+                if (eY - sY == 1 && (sX - 1 == eX || sX + 1 == eX)) return true;
         }
-        return pieceIsOnSpotYX && (endX - startX == 1 || startX - endX == 1);
+        return eX - sX == 1 || sX - eX == 1;
     }
 
     @Override
     public Type getType() {
         return Type.Pawn;
+    }
+
+    public boolean isPieceInEndPoint() {
+        return false;
     }
 }

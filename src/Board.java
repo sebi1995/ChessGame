@@ -4,31 +4,18 @@ public class Board {
 
     private Piece[][] board;
     private StringBuilder stringBuilder;
-    private Player player1, player2;
-    private int turn = 1;
 
     Board(Player player1, Player player2) {
-        this.player1 = player1;
-        this.player2 = player2;
-
         stringBuilder = new StringBuilder();
 
-        initBoard(board = new Piece[8][8]);
-
-        board[5][1] = new Pawn(5, 1, "\033[1;31m");
+        initBoard(player1, player2, board = new Piece[8][8]);
+//        board[5][1] = new Pawn(5, 1, "\033[1;31m");
+        board[4][2] = new Pawn(4, 2, "\033[1;31m");
+        board[3][3] = new Pawn(3, 3, "\033[1;31m");
+        board[2][4] = new Pawn(2, 4, "\033[1;31m");
     }
 
-    /*
-    R  K  B  Q  KI B  K  R
-    P  P  P  P  P  P  P  P
-    N  N  N  N  N  N  N  N
-    N  N  N  N  N  N  N  N
-    N  N  N  N  N  N  N  N
-    N  N  N  N  N  N  N  N
-    P  P  P  P  P  P  P  P
-    R  K  B  KI Q  B  K  R
-    */
-    private void initBoard(Piece[][] board) {
+    private void initBoard(Player player1, Player player2, Piece[][] board) {
         int p1 = 0;
         for (int i = 6; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
@@ -75,17 +62,42 @@ public class Board {
         return stringBuilder;
     }
 
-    //    public boolean makeMove(Player player, int x, int startY){
-    public boolean makeMove(Player player, int startY, int startX, int endY, int endX) {
-        if (board[startY][startX] == null) return false;
-        if (board[startY][startX].isValidMove(player.getWho(), startY, startX, endY, endX, isPieceOnThatSpot(endY, endX))) {
-            board[endY][endX] = board[startY][startX];
-            board[startY][startX] = null;
-            return true;
-        } else return false;
+    public boolean makeMove(Player player, int sY, int sX, int eY, int eX) {
+        if (board[sY][sX] == null) return false;
+
+        if (isSameColorPieceOnEndPos(sY, sX, eY, eX)) {
+            return false;
+        } else {
+            boolean canContinue;
+
+            canContinue = board[sY][sX].isValidMove(player.getWho(), sY, sX, eY, eX, isPieceOnEndPos(sY, sX, eY, eX));
+
+            if (canContinue) {
+                board[eY][eX] = board[sY][sX];
+                board[sY][sX] = null;
+                return true;
+            } else return false;
+
+
+//            boolean ifContinue;
+//            if ((board[sY][sX] instanceof Pawn && isSameColorPieceOnEndPos(sY, sX, eY, eX))) {
+//                ifContinue = board[sY][sX].isValidMove(player.getWho(), sY, sX, eY, eX);
+//            } else {
+//                ifContinue = board[sY][sX].isValidMove(player.getWho(), sY, sX, eY, eX);
+//            }
+//            if (ifContinue) {
+//                board[eY][eX] = board[sY][sX];
+//                board[sY][sX] = null;
+//                return true;
+//            }
+        }
     }
 
-    private boolean isPieceOnThatSpot(int y, int x){
-        return board[y][x] != null;
+    private boolean isSameColorPieceOnEndPos(int sY, int sX, int eY, int eX) {
+        return board[eY][eX] != null && Integer.parseInt(board[sY][sX].getColor().substring(4, 6)) == Integer.parseInt(board[eY][eX].getColor().substring(4, 6));
+    }
+
+    private boolean isPieceOnEndPos(int sY, int sX, int eY, int eX) {
+        return board[eY][eX] != null && Integer.parseInt(board[sY][sX].getColor().substring(4, 6)) != Integer.parseInt(board[eY][eX].getColor().substring(4, 6));
     }
 }

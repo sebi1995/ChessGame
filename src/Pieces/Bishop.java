@@ -7,7 +7,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int startY, int startX, int endY, int endX, boolean pieceIsOnSpotYX) {
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
         return false;
     }
 
