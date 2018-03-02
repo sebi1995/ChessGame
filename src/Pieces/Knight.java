@@ -1,13 +1,15 @@
 package Pieces;
 
+import Game.Board;
+
 public class Knight extends Piece {
 
-    public Knight(int x, int y, String color) {
-        super(x, y, color);
+    public Knight(String color, Board board) {
+        super(color, board);
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
         return false;
     }
 

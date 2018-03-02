@@ -1,13 +1,15 @@
 package Pieces;
 
+import Game.Board;
+
 public class Pawn extends Piece {
 
-    public Pawn(int x, int y, String color) {
-        super(x, y, color);
+    public Pawn(String color, Board board) {
+        super(color, board);
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
         switch (who) {
             case 1:
                 if (eY >= sY) return false;
@@ -24,9 +26,5 @@ public class Pawn extends Piece {
     @Override
     public Type getType() {
         return Type.Pawn;
-    }
-
-    public boolean isPieceInEndPoint() {
-        return false;
     }
 }

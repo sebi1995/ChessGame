@@ -1,14 +1,56 @@
 package Pieces;
 
+import Game.Board;
+
 public class Bishop extends Piece {
 
-    public Bishop(int x, int y, String color) {
-        super(x, y, color);
+    public Bishop(String color, Board board) {
+        super(color, board);
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX, boolean pieceOnEndPos) {
-        return false;
+    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
+        int y = sY;
+        int x = sX;
+        String passThisString = "";
+
+        if (y < eY && x > eX) {
+            while (y <= eY && x >= eX) {
+                ++y;
+                --x;
+                if (y == eY && x == eX) {
+                    passThisString = "dl";
+                }
+            }
+        } else if (y > eY && x < eX) {
+            while (y >= eY && x <= eX) {
+                --y;
+                ++x;
+                if (y == eY && x == eX) {
+                    passThisString = "ur";
+                }
+            }
+            if (passThisString.equals("")) return false;
+        } else if (y > eY && x > eX) {
+            while (y >= 0 && x >= 0) {
+                --y;
+                --x;
+                if (y == eY && x == eX) {
+                    passThisString = "ul";
+                }
+            }
+            if (passThisString.equals("")) return false;
+        } else if (y < eY && x < eX) {
+            while (y <= eY && x <= eX) {
+                ++y;
+                ++x;
+                if (y == eY && x == eX) {
+                    passThisString = "dr";
+                }
+            }
+        } else return false;
+
+        return !passThisString.equals("") && !board.isPieceOnPath(passThisString, sY, sX, eY, eX);
     }
 
     @Override
