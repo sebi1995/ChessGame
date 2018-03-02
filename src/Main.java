@@ -1,8 +1,6 @@
 import Game.Board;
 import Game.Player;
 
-import java.util.ArrayList;
-
 class Main {
 
 
@@ -14,7 +12,6 @@ class Main {
         player2 = new Player("Tom", 2);
         board = new Board();
 
-        ArrayList<Boolean> arrayList = new ArrayList<>();
         System.out.println(board.getBoard());
         System.out.println(board.makeMove(player1, 7, 2, 5, 1));
         System.out.println(board.getBoard());
@@ -22,10 +19,5 @@ class Main {
         System.out.println(board.getBoard());
         System.out.println(board.makeMove(player1, 7, 2, 5, 0));
         System.out.println(board.getBoard());
-
-        for (boolean b :
-                arrayList) {
-            System.out.print(b + " ");
-        }
     }
 }
