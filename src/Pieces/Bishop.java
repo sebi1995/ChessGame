@@ -15,37 +15,30 @@ public class Bishop extends Piece {
         String passThisString = "";
 
         if (y < eY && x > eX) {
-            while (y <= eY && x >= eX) {
-                ++y;
-                --x;
-                if (y == eY && x == eX) {
+            while (y <= 7 && x >= 0) {
+                if (++y == eY && --x == eX) {
                     passThisString = "dl";
                 }
             }
         } else if (y > eY && x < eX) {
-            while (y >= eY && x <= eX) {
-                --y;
-                ++x;
+            while (--y >= 0 && ++x <= 7) {
                 if (y == eY && x == eX) {
                     passThisString = "ur";
+                    break;
                 }
             }
-            if (passThisString.equals("")) return false;
         } else if (y > eY && x > eX) {
-            while (y >= 0 && x >= 0) {
-                --y;
-                --x;
+            while (--y >= 0 && --x >= 0) {
                 if (y == eY && x == eX) {
                     passThisString = "ul";
+                    break;
                 }
             }
-            if (passThisString.equals("")) return false;
         } else if (y < eY && x < eX) {
-            while (y <= eY && x <= eX) {
-                ++y;
-                ++x;
+            while (++y <= 7 && ++x <= 7) {
                 if (y == eY && x == eX) {
                     passThisString = "dr";
+                    break;
                 }
             }
         } else return false;

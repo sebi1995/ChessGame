@@ -124,20 +124,37 @@ public class Board {
 
         switch (path) {
             case "ul":
-                while (y > eY && x > eX) {
-                    if (board[--y][--x] != null) return true;
+                while (--y > eY && --x > eX) {
+                    if (board[y][x] != null) return true;
                 }
             case "ur":
-                while (y > eY && x < eX) {
-                    if (board[--y][++x] != null) return true;
+                while (--y > eY && ++x < eX) {
+                    if (board[y][x] != null) return true;
+
                 }
             case "dr":
-                while (y < eY && x < eX) {
-                    if (board[++y][++x] != null) return true;
+                while (++y < eY && ++x < eX) {
+                    if (board[y][x] != null) return true;
                 }
             case "dl":
-                while (y < eY && x > eX) {
-                    if (board[++y][--x] != null) return true;
+                while (++y < eY && --x > eX) {
+                    if (board[y][x] != null) return true;
+                }
+            case "up":
+                while (--y > eY){
+                    if (board[y][x] != null) return true;
+                }
+            case "down":
+                while (++y < eY){
+                    if (board[y][x] != null) return true;
+                }
+            case "left":
+                while (--x > eX){
+                    if (board[y][x] != null) return true;
+                }
+            case "right":
+                while (++x < eX){
+                    if (board[y][x] != null) return true;
                 }
             default:
                 return false;
