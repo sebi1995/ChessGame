@@ -31,7 +31,7 @@ public class King extends Piece {
         }
 
         //this returns if move is valid or not
-        return validMove && board.isKingNotInDanger(this.getColor(), eY, eX);
+        return validMove && board.isMoveNotPuttingKingInCheck(this.getColor(), eY, eX);
     }
 
     @Override

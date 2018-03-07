@@ -20,6 +20,7 @@ public abstract class Piece {
 
     //get what type of piece this is
     public abstract Type getType();
+
     public String getColor(){
         return this.color;
     };
