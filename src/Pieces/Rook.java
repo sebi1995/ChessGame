@@ -9,13 +9,41 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
-//        switch (who){
-//            case 1:
-//                if (sX )
-//            case 2:
-//        }
-        return true;
+    public boolean isValidMove(int sY, int sX, int eY, int eX) {
+        int y = sY, x = sX;
+        String passThisString = "";
+
+        if (y > eY && x == eX) {
+            while (--y >= 0) {
+                if (y == eY) {
+                    passThisString = "up";
+                    break;
+                }
+            }
+        } else if (y < eY && x == eX) {
+            while (++y <= 7) {
+                if (y == eY) {
+                    passThisString = "down";
+                    break;
+                }
+            }
+        } else if (x > eX && y == eY) {
+            while (--x >= 0) {
+                if (x == eX) {
+                    passThisString = "left";
+                    break;
+                }
+            }
+        } else if (x < eX && y == eY) {
+            while (++x <= 7) {
+                if (x == eX) {
+                    passThisString = "right";
+                    break;
+                }
+            }
+        } else return false;
+
+        return !passThisString.equals("") && board.isPieceNotOnPath(passThisString, sY, sX, eY, eX);
     }
 
     @Override
@@ -23,3 +51,11 @@ public class Rook extends Piece {
         return Type.Rook;
     }
 }
+
+
+
+
+
+
+
+

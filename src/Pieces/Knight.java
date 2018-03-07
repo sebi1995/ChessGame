@@ -9,8 +9,15 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
-        return false;
+    public boolean isValidMove(int sY, int sX, int eY, int eX) {
+        return sY - eY == 1 && sX - eX == 2 ||
+                sY - eY == -1 && sX - eX == 2 ||
+                sY - eY == 1 && sX - eX == -2 ||
+                sY - eY == -1 && sX - eX == -2 ||
+                sY - eY == 2 && sX - eX == 1 ||
+                sY - eY == -2 && sX - eX == 1 ||
+                sY - eY == 2 && sX - eX == -1 ||
+                sY - eY == -2 && sX - eX == -1;
     }
 
     @Override

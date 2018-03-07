@@ -9,7 +9,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int who, int sY, int sX, int eY, int eX) {
+    public boolean isValidMove(int sY, int sX, int eY, int eX) {
         int y = sY;
         int x = sX;
         String passThisString = "";
@@ -43,7 +43,7 @@ public class Bishop extends Piece {
             }
         } else return false;
 
-        return !passThisString.equals("") && !board.isPieceOnPath(passThisString, sY, sX, eY, eX);
+        return !passThisString.equals("") && board.isPieceNotOnPath(passThisString, sY, sX, eY, eX);
     }
 
     @Override

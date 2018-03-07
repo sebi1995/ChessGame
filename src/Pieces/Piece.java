@@ -16,11 +16,10 @@ public abstract class Piece {
     }
 
     //isValidMove checks if the move the user wants to make on the piece is a valid move that the piece can make
-    public abstract boolean isValidMove(int who, int sY, int sX, int eY, int eX);
+    public abstract boolean isValidMove(int sY, int sX, int eY, int eX);
 
     //get what type of piece this is
     public abstract Type getType();
-
     public String getColor(){
         return this.color;
     };

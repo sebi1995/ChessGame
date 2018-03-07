@@ -5,21 +5,17 @@ import Pieces.*;
 public class Board {
 
     private Piece[][] board;
-    private static final String BLUE = "\033[1;34m";
-    private static final String RED = "\033[1;31m";
+    private final String BLUE = "\033[1;34m";
+    private final String RED = "\033[1;31m";
 
-    private Piece piece;
+    private int turn = 1;
 
     private StringBuilder stringBuilder;
 
     public Board() {
-        stringBuilder = new StringBuilder();
+        this.stringBuilder = new StringBuilder();
 
         initBoard(board = new Piece[8][8]);
-
-        board[4][2] = new Pawn("\033[1;31m", this);
-        board[3][3] = new Pawn("\033[1;31m", this);
-        board[2][4] = new Pawn("\033[1;31m", this);
     }
 
     private void initBoard(Piece[][] board) {
@@ -83,81 +79,227 @@ public class Board {
                 sX >= 0 && sX <= 7 &&
                 eY >= 0 && eY <= 7 &&
                 eX >= 0 && eX <= 7) {
-            if (board[sY][sX] == null) {
-                return false;
-            } else {
-                if (isSameColorPieceOnEndPos(sY, sX, eY, eX)) {
+
+            String pieceColor = board[sY][sX].getColor();
+
+            if (board[sY][sX] != null){
+                if (isSameColorPieceOnEndPos(pieceColor, eY, eX)) {
                     return false;
                 } else {
-                    boolean canContinue;
-
-                    canContinue = board[sY][sX].isValidMove(player.getWho(), sY, sX, eY, eX);
-
-                    if (canContinue) {
+                    if (player.getColor().equals(pieceColor) && board[sY][sX].isValidMove(sY, sX, eY, eX)) {
                         board[eY][eX] = board[sY][sX];
                         board[sY][sX] = null;
+                        turn = (turn == 1) ? 2 : 1;
                         return true;
-                    } else return false;
+                    }
                 }
-            }
-
-        } else {
-            return false;
+            } else return false;
         }
 
+        return false;
     }
 
-
-    private boolean isSameColorPieceOnEndPos(int sY, int sX, int eY, int eX) {
-        return board[eY][eX] != null && Integer.parseInt(board[sY][sX].getColor().substring(4, 6)) ==
-                Integer.parseInt(board[eY][eX].getColor().substring(4, 6));
+    private boolean isSameColorPieceOnEndPos(String color, int eY, int eX) {
+        return board[eY][eX] != null && color.equals(board[eY][eX].getColor());
     }
 
-    public boolean isDifferentColorPieceOnEndPos(int sY, int sX, int eY, int eX) {
-        return board[eY][eX] != null && Integer.parseInt(board[sY][sX].getColor().substring(4, 6)) !=
-                Integer.parseInt(board[eY][eX].getColor().substring(4, 6));
+    public boolean isDifferentColorPieceOnEndPos(String color, int eY, int eX) {
+        return board[eY][eX] != null && !color.equals(board[eY][eX].getColor());
     }
 
-    public boolean isPieceOnPath(String path, int sY, int sX, int eY, int eX) {
+    public boolean isPieceNotOnPath(String path, int sY, int sX, int eY, int eX) {
         int y = sY;
         int x = sX;
 
         switch (path) {
             case "ul":
                 while (--y > eY && --x > eX) {
-                    if (board[y][x] != null) return true;
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "ur":
                 while (--y > eY && ++x < eX) {
-                    if (board[y][x] != null) return true;
-
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "dr":
                 while (++y < eY && ++x < eX) {
-                    if (board[y][x] != null) return true;
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "dl":
                 while (++y < eY && --x > eX) {
-                    if (board[y][x] != null) return true;
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "up":
-                while (--y > eY){
-                    if (board[y][x] != null) return true;
+                while (--y > eY) {
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "down":
-                while (++y < eY){
-                    if (board[y][x] != null) return true;
+                while (++y < eY) {
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "left":
-                while (--x > eX){
-                    if (board[y][x] != null) return true;
+                while (--x > eX) {
+                    if (board[y][x] != null) return false;
                 }
+                break;
             case "right":
-                while (++x < eX){
-                    if (board[y][x] != null) return true;
+                while (++x < eX) {
+                    if (board[y][x] != null) return false;
                 }
-            default:
-                return false;
+                break;
         }
+        return true;
+    }
+
+    public boolean isKingNotInDanger(String startPieceColor, int eY, int eX) {
+        int tempY = eY;
+        int tempX = eX;
+
+        //check if pawn can take king if moved to where player wants to move, if king in danger, don't allow user to make move
+        if (turn == 1 && board[eY - 1][eX - 1] instanceof Pawn && isDifferentColorPieceOnEndPos(startPieceColor, eY - 1, eX - 1) ||
+                turn == 2 && board[eY - 1][eX + 1] instanceof Pawn && isDifferentColorPieceOnEndPos(startPieceColor, eY - 1, eX + 1)) {
+            return false;
+        } else if (turn == 2 && board[eY + 1][eX - 1] instanceof Pawn && isDifferentColorPieceOnEndPos(startPieceColor, eY + 1, eX - 1) ||
+                turn == 2 && board[eY + 1][eX + 1] instanceof Pawn && isDifferentColorPieceOnEndPos(startPieceColor, eY + 1, eX + 1)) {
+            return false;
+        }
+
+        //check for horse
+        if (eY + 2 <= 7 && eX - 1 >= 0 && board[eY + 2][eX - 1] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY + 2, eX - 1) ||
+                eY + 2 <= 7 && eX + 1 <= 7 && board[eY + 2][eX + 1] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY + 2, eX + 1) ||
+                eY + 1 <= 7 && eX + 2 <= 7 && board[eY + 1][eX + 2] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY + 1, eX + 2) ||
+                eY + 1 <= 7 && eX - 2 >= 0 && board[eY + 1][eX - 2] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY + 1, eX - 2) ||
+                eY - 2 >= 0 && eX - 1 >= 0 && board[eY - 2][eX - 1] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY - 2, eX - 1) ||
+                eY - 2 >= 0 && eX + 1 <= 7 && board[eY - 2][eX + 1] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY - 2, eX + 1) ||
+                eY - 1 >= 0 && eX + 2 <= 7 && board[eY - 1][eX + 2] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY - 1, eX + 2) ||
+                eY - 1 >= 0 && eX - 2 >= 0 && board[eY - 1][eX - 2] instanceof Knight && isDifferentColorPieceOnEndPos(startPieceColor, eY - 1, eX - 2)) {
+            return false;
+        }
+
+        //check for queen, rook or bishop
+        //up left check
+        while (tempY >= 0 && tempX >= 0) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            --tempY;
+            --tempX;
+        }
+        tempY = eY;
+        tempX = eX;
+        //up right check
+        while (tempY >= 0 && tempX <= 7) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            --tempY;
+            ++tempX;
+        }
+        tempY = eY;
+        tempX = eX;
+        //down left check
+        while (tempY <= 7 && tempX >= 0) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            ++tempY;
+            --tempX;
+        }
+        tempY = eY;
+        tempX = eX;
+        //down right check
+        while (tempY <= 7 && tempX <= 7) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            ++tempY;
+            ++tempX;
+        }
+        tempY = eY;
+        tempX = eX;
+        //up
+        while (tempY >= 0) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            --tempY;
+        }
+        tempY = eY;
+        tempX = eX;
+        //down
+        while (tempY <= 7) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            ++tempY;
+        }
+        tempY = eY;
+        tempX = eX;
+        //left
+        while (tempX >= 0) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            --tempX;
+        }
+        tempY = eY;
+        tempX = eX;
+        //right
+        while (tempX <= 7) {
+            if (board[tempY][tempX] != null) {
+                if (board[tempY][tempX] instanceof Queen || board[tempY][tempX] instanceof Rook) {
+                    if (isDifferentColorPieceOnEndPos(startPieceColor, tempY, tempX)) {
+                        return false;
+                    }
+                }
+                break;
+            }
+            ++tempX;
+        }
+        return true;
+    }
+
+    public int getTurn() {
+        return turn;
     }
 }

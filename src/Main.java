@@ -3,24 +3,67 @@ import Game.Player;
 
 class Main {
 
+    private static final String BLUE = "\033[1;34m";
+    private static final String RED = "\033[1;31m";
 
     public static void main(String[] args) {
         Player player1, player2;
         Board board;
-
-        player1 = new Player("Sebi", 1);
-        player2 = new Player("Tom", 2);
+        player1 = new Player("Sebi", 1, BLUE);
+        player2 = new Player("Tom", 2, RED);
         board = new Board();
 
-        System.out.println(board.makeMove(player1, 7, 2, 5, 1));
-        System.out.println(board.getBoard());
-        System.out.println(board.makeMove(player1, 6, 1, 5, 1));
-        System.out.println(board.getBoard());
-        System.out.println(board.makeMove(player1, 7, 2, 5, 0));
-        System.out.println(board.getBoard());
-        System.out.println(board.makeMove(player1, 5, 0, 1, 4));
-        System.out.println(board.getBoard());
-        System.out.println(board.makeMove(player1, 1, 4, 0, 3));
+
+
         System.out.println(board.getBoard());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* writeToFile writeToFile = new writeToFile();
+
+    System.out.println(writeToFile.getText("input"));
+
+    writeToFile.writeText("hool", "input");
+    writeToFile.writeText("hool", "input");
+    writeToFile.writeText("hool", "input");
+    writeToFile.writeText("hool", "input");
+
+    System.out.println(writeToFile.getText("input"));*/
