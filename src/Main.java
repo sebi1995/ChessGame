@@ -15,16 +15,19 @@ class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        String color = player1.getColor();
         Player currentPlayer = player1;
+        String currentPlayerColor = currentPlayer.getColor();
+        int move = 1;
 
-        while (board.canGameContinue(color)){
+        while (board.canGameContinue(currentPlayerColor)){
             System.out.println("It's " + currentPlayer.getName() + " turn!");
 
             System.out.println(board.getBoard());
 
-            if (board.isKingInCheck(currentPlayer)){
-                System.out.println("Your King is in danger! you must move it or you lose.");
+            if (move > 1){
+                if (board.isPositionCheckForKing(currentPlayerColor, board.getKingYPos(), board.getKingXPos())){
+                    System.out.println("Your King is in danger! you must move it or you lose.");
+                }
             }
 
             System.out.println(currentPlayer.getName() + ", please enter a starting X and Y position to select a piece to move,\nand a ending X and Y position to move the piece.");
@@ -40,9 +43,21 @@ class Main {
 
             if (board.makeMove(currentPlayer, sY, sX, eY, eX)){
                 currentPlayer = (currentPlayer == player1) ? player2 : player1;
-                color = currentPlayer.getColor();
+                currentPlayerColor = currentPlayer.getColor();
             } else System.out.println("Try again!");
+
+            ++move;
         }
+
+        System.out.print("Congratulations ");
+
+        if (currentPlayerColor.equals(player1.getColor())){
+            System.out.print(player2.getName());
+        } else {
+            System.out.print(player1.getName());
+        }
+
+        System.out.print(", you have won!");
     }
 }
 
