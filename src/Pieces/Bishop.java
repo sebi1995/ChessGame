@@ -4,46 +4,46 @@ import Game.Board;
 
 public class Bishop extends Piece {
 
+
     public Bishop(String color, Board board) {
         super(color, board);
     }
 
     @Override
-    public boolean isValidMove(int sY, int sX, int eY, int eX) {
-        int y = sY;
-        int x = sX;
-        String passThisString = "";
-
-        if (y < eY && x > eX) {
-            while (y <= 7 && x >= 0) {
-                if (++y == eY && --x == eX) {
-                    passThisString = "dl";
+    public boolean isValidMove(int startY, int startX, int endY, int endX) {
+        //upright
+        if (startY > endY && startX < endX) {
+            while (--startY >= 0 && ++startX <= 7) {
+                if (startY == endY && startX == endX) {
+                    return true;
                 }
             }
-        } else if (y > eY && x < eX) {
-            while (--y >= 0 && ++x <= 7) {
-                if (y == eY && x == eX) {
-                    passThisString = "ur";
-                    break;
+        }
+        //downright
+        if (startY < endY && startX < endX) {
+            while (++startY <= 7 && ++startX <= 7) {
+                if (startY == endY && startX == endX) {
+                    return true;
                 }
             }
-        } else if (y > eY && x > eX) {
-            while (--y >= 0 && --x >= 0) {
-                if (y == eY && x == eX) {
-                    passThisString = "ul";
-                    break;
+        }
+        //downleft
+        if (startY < endY && startX > endX) {
+            while (++startY <= 7 && --startX >= 0) {
+                if (startY == endY && startX == endX) {
+                    return true;
                 }
             }
-        } else if (y < eY && x < eX) {
-            while (++y <= 7 && ++x <= 7) {
-                if (y == eY && x == eX) {
-                    passThisString = "dr";
-                    break;
+        }
+        //upleft
+        if (startY > endY && startX > endX) {
+            while (--startY >= 0 && --startX >= 0) {
+                if (startY == endY && startX == endX) {
+                    return true;
                 }
             }
-        } else return false;
-
-        return !passThisString.equals("") && board.isPieceNotOnPath(passThisString, sY, sX, eY, eX);
+        }
+        return false;
     }
 
     @Override

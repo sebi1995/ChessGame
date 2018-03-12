@@ -4,46 +4,81 @@ import Game.Board;
 
 public class Rook extends Piece {
 
+    private boolean rookIsInStartPosition = true;
+
     public Rook(String color, Board board) {
         super(color, board);
     }
 
+
     @Override
-    public boolean isValidMove(int sY, int sX, int eY, int eX) {
-        int y = sY, x = sX;
-        String passThisString = "";
+    public boolean isValidMove(int startY, int startX, int endY, int endX) {
+        int Y = startY;
+        int X = startX;
 
-        if (y > eY && x == eX) {
-            while (--y >= 0) {
-                if (y == eY) {
-                    passThisString = "up";
-                    break;
+        if (rookIsInStartPosition) {
+            if (Y == 7 && (X < endX || X > endX)) {
+                if (startX - endX == -3) {
+                    if (board.isPathClear("right", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
+                }
+                if (startX - endX == 2) {
+                    if (board.isPathClear("left", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
                 }
             }
-        } else if (y < eY && x == eX) {
-            while (++y <= 7) {
-                if (y == eY) {
-                    passThisString = "down";
-                    break;
-                }
-            }
-        } else if (x > eX && y == eY) {
-            while (--x >= 0) {
-                if (x == eX) {
-                    passThisString = "left";
-                    break;
-                }
-            }
-        } else if (x < eX && y == eY) {
-            while (++x <= 7) {
-                if (x == eX) {
-                    passThisString = "right";
-                    break;
-                }
-            }
-        } else return false;
+        }
 
-        return !passThisString.equals("") && board.isPieceNotOnPath(passThisString, sY, sX, eY, eX);
+        //up
+        if (startY > endY && startX == endX) {
+            while (--Y >= 0) {
+                if (Y == endY) {
+                    if (board.isPathClear("up", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
+                }
+            }
+        }
+        //right
+        if (startY == endY && startX < endX) {
+            while (++X <= 7) {
+                if (X == endX) {
+                    if (board.isPathClear("right", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
+                }
+            }
+        }
+        //down
+        if (startY < endY && startX == endX) {
+            while (++Y <= 7) {
+                if (Y == endY) {
+                    if (board.isPathClear("down", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
+                }
+            }
+        }
+        //left
+        if (startX > endX && startY == endY) {
+            while (--X >= 0) {
+                if (X == endX) {
+                    if (board.isPathClear("left", startY, startX, endY, endX)) {
+                        rookIsInStartPosition = false;
+                        return true;
+                    }
+                }
+            }
+        }
+        //else
+        return false;
     }
 
     @Override
@@ -51,11 +86,3 @@ public class Rook extends Piece {
         return Type.Rook;
     }
 }
-
-
-
-
-
-
-
-

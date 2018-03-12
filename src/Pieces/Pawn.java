@@ -9,29 +9,21 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int sY, int sX, int eY, int eX) {
-        switch (board.getTurn()) {
-            case 1:
-                if (eY >= sY) return false;
-                if (sY == 6 && (sX >= 0 && sX <= 7) && (sY - eY == 2) && (sX == eX) && board.isPieceNotOnPath("up", sY, sX, eY, eX))
-                    return true;
-                if (sX == eX && sY - eY == 1 && !board.isDifferentColorPieceOnEndPos(this.getColor(), eY, eX)) {
-                    return true;
-                }
-                if (sY - eY == 1 && (sX - 1 == eX || sX + 1 == eX) && board.isDifferentColorPieceOnEndPos(this.getColor().substring(4, 6), eY, eX)) {
-                    return true;
-                }
-            case 2:
-                if (eY <= sY) return false;
-                if (sY == 1 && (sX >= 0 && sX <= 7) && (sY - eY == -2) && (sX == eX) && board.isPieceNotOnPath("down", sY, sX, eY, eX))
-                    return true;
-                if (sX == eX && sY - eY == -1 && !board.isDifferentColorPieceOnEndPos(this.getColor(), eY, eX)) {
-                    return true;
-                }
-                if (sY - eY == -1 && (sX - 1 == eX || sX + 1 == eX) && board.isDifferentColorPieceOnEndPos(this.getColor().substring(4, 6), eY, eX))
-                    return true;
+    public boolean isValidMove(int startY, int startX, int endY, int endX) {
+
+        if (startY == 6 && startY - endY == 2 && startX == endX) {
+            return !board.isPieceOnPosition(endY, endX);
         }
-        //this is unreachable
+
+        if (startY - endY == 1 && startX == endX) {
+            return !board.isPieceOnPosition(endY, endX);
+        }
+
+        if (startY - endY == 1 && startX - endX == 1 || startY - endY == 1 && startX - endX == -1) {
+            return board.isPieceOnPosition(endY, endX) && board.isDifferentColorPieceOnPosition(getColor(), endY, endX);
+        }
+
+
         return false;
     }
 

@@ -4,34 +4,49 @@ import Game.Board;
 
 public class King extends Piece {
 
+    private boolean kingIsInStartPosition = true;
+
     public King(String color, Board board) {
         super(color, board);
     }
 
-    @Override
-    public boolean isValidMove(int sY, int sX, int eY, int eX) {
-        boolean validMove = false;
 
-        if (sY - eY == 0 && sX - eX == 1) {
-            validMove = true;
-        } else if (sY - eY == 0 && sX - eX == -1) {
-            validMove = true;
-        } else if (sY - eY == 1 && sX - eX == 1) {
-            validMove = true;
-        } else if (sY - eY == 1 && sX - eX == 0) {
-            validMove = true;
-        } else if (sY - eY == 1 && sX - eX == -1) {
-            validMove = true;
-        } else if (sY - eY == -1 && sX - eX == 1) {
-            validMove = true;
-        } else if (sY - eY == -1 && sX - eX == 0) {
-            validMove = true;
-        } else if (sY - eY == -1 && sX - eX == -1) {
-            validMove = true;
+    @Override
+    public boolean isValidMove(int startY, int startX, int endY, int endX) {
+        if (startY - endY == 1 && startX == endX ||             //up
+                startY - endY == 1 && startX - endX == -1 ||    //upright
+                startY == endY && startX - endX == -1 ||        //right
+                startY - endY == -1 && startX - endX == -1 ||   //downright
+                startY - endY == -1 && startX == endX ||        //down
+                startY - endY == -1 && startX - endX == 1 ||    //downleft
+                startY == endY && startX - endX == 1 ||         //left
+                startY - endY == 1 && startX - endX == 1) {     //upleft
+
+            if (!board.isPieceOnPosition(endY, endX) && board.canKingMoveThere(getColor(), endY, endX) || board.isDifferentColorPieceOnPosition(getColor(), endY, endX) && board.canKingMoveThere(getColor(), endY, endX)) {
+
+                board.playerOneKingY = endY;
+                board.playerOneKingX = endX;
+
+                if (kingIsInStartPosition) {
+                    kingIsInStartPosition = false;
+                }
+
+                return true;
+            }
         }
 
-        //this returns if move is valid or not
-        return validMove && !board.isPositionCheckForKing(this.getColor(), eY, eX);
+        //castle
+        if (kingIsInStartPosition) {
+            if (startY == 7 && startX == 4 && startY == endY) {
+                if (startX - endX == 2) {
+                    return board.canKingCastle(getColor(), "left");
+                } else if (startX - endX == -2) {
+                    return board.canKingCastle(getColor(), "right");
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override

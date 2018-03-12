@@ -9,69 +9,76 @@ public class Queen extends Piece {
     }
 
     @Override
-    public boolean isValidMove(int sY, int sX, int eY, int eX) {
-        int y = sY;
-        int x = sX;
+    public boolean isValidMove(int startY, int startX, int endY, int endX) {
+
         String passThisString = "";
 
-        if (y < eY && x > eX) {
-            while (y <= 7 && x >= 0) {
-                if (++y == eY && --x == eX) {
-                    passThisString = "dl";
+        //up            --y x
+        if (startY > endY && startX == endX) {
+            while (--startY >= 0) {
+                if (startY == endY) {
+                    return board.isPathClear("up", startY, startX, endY, endX);
                 }
             }
-        } else if (y > eY && x < eX) {
-            while (--y >= 0 && ++x <= 7) {
-                if (y == eY && x == eX) {
-                    passThisString = "ur";
-                    break;
+        }
+        //upright       --y ++x
+        if (startY > endY && startX < endX) {
+            while (--startY >= 0 && ++startX <= 7) {
+                if (startY == endY && startX == endX) {
+                    return board.isPathClear("upright", startY, startX, endY, endX);
                 }
             }
-        } else if (y > eY && x > eX) {
-            while (--y >= 0 && --x >= 0) {
-                if (y == eY && x == eX) {
-                    passThisString = "ul";
-                    break;
+        }
+        //right         y ++x
+        if (startY == endY && startX < endX) {
+            while (++startX <= 7) {
+                if (startX == endX) {
+                    return board.isPathClear("right", startY, startX, endY, endX);
                 }
             }
-        } else if (y < eY && x < eX) {
-            while (++y <= 7 && ++x <= 7) {
-                if (y == eY && x == eX) {
-                    passThisString = "dr";
-                    break;
+        }
+        //downright     ++y ++x
+        if (startY < endY && startX < endX) {
+            while (++startY <= 7 && ++startX <= 7) {
+                if (startY == endY && startX == endX) {
+                    return board.isPathClear("downright", startY, startX, endY, endX);
                 }
             }
-        } else if (y > eY && x == eX) {
-            while (--y >= 0) {
-                if (y == eY) {
-                    passThisString = "up";
-                    break;
+        }
+        //down          ++y x
+        if (startY < endY && startX == endX) {
+            while (++startY <= 7) {
+                if (startY == endY) {
+                    return board.isPathClear("down", startY, startX, endY, endX);
                 }
             }
-        } else if (y < eY && x == eX) {
-            while (++y <= 7) {
-                if (y == eY) {
-                    passThisString = "down";
-                    break;
+        }
+        //downleft      ++y --x
+        if (startY < endY && startX > endX) {
+            while (++startY <= 7 && --startX >= 0) {
+                if (startY == endY && startX == endX) {
+                    return board.isPathClear("downleft", startY, startX, endY, endX);
                 }
             }
-        } else if (x > eX && y == eY) {
-            while (--x >= 0) {
-                if (x == eX) {
-                    passThisString = "left";
-                    break;
+        }
+        //left          --y x
+        if (startY > endY && startX == endX) {
+            while (--startY >= 0) {
+                if (startY == endY) {
+                    return board.isPathClear("left", startY, startX, endY, endX);
                 }
             }
-        } else if (x < eX && y == eY) {
-            while (++x <= 7) {
-                if (x == eX) {
-                    passThisString = "right";
-                    break;
+        }
+        //upleft        --y --x
+        if (startY > endY && startX > endX) {
+            while (--startY >= 0 && --startX >= 0) {
+                if (startY == endY && startX == endX) {
+                    return board.isPathClear("upleft", startY, startX, endY, endX);
                 }
             }
-        } else return false;
+        }
 
-        return !passThisString.equals("") && board.isPieceNotOnPath(passThisString, sY, sX, eY, eX);
+        return false;
     }
 
     @Override
@@ -79,9 +86,3 @@ public class Queen extends Piece {
         return Type.Queen;
     }
 }
-
-
-
-
-
-

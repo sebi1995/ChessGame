@@ -1,5 +1,5 @@
 package Pieces;
 
-public enum Type {
-    King, Queen, Rook, Bishop, Knight, Pawn;
+public enum Type{
+    King, Queen, Pawn, Rook, Knight, Bishop
 }

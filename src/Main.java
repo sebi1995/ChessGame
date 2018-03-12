@@ -1,57 +1,104 @@
 import Game.Board;
 import Game.Player;
 
+import java.util.Random;
 import java.util.Scanner;
 
-class Main {
+public class Main {
 
-    private static final String BLUE = "\033[1;34m";
-    private static final String RED = "\033[1;31m";
+    private final static String BLUE = "\033[1;34m";
+    private final static String RED = "\033[1;31m";
 
     public static void main(String[] args) {
-        Player player1 = new Player("Sebi", BLUE);
-        Player player2 = new Player("Tom", RED);
-        Board board = new Board();
-
         Scanner scanner = new Scanner(System.in);
+        Player player1, player2;
+        Board board;
+
+        board = new Board();
+//        System.out.println("Player 1, please enter your name.");
+//        System.out.print("Name: ");
+//        player1 = new Player(scanner.nextLine(), BLUE);
+        player1 = new Player("seb", BLUE);
+//        System.out.println("\nPlayer 2, please enter your name.");
+//        System.out.print("Name: ");
+//        player2 = new Player(scanner.nextLine(), RED);
+        player2 = new Player("tom", RED);
 
         Player currentPlayer = player1;
-        String currentPlayerColor = currentPlayer.getColor();
-        int move = 1;
 
-        while (board.canGameContinue(currentPlayerColor)){
-            System.out.println("It's " + currentPlayer.getName() + " turn!");
+        int kingY, kingX;
+        boolean isKingCheck;
 
-            System.out.println(board.getBoard());
+        while (board.canGameContinue(currentPlayer)) {
+            kingY = board.getKingY();
+            kingX = board.getKingX();
 
-            if (move > 1){
-                if (board.isPositionCheckForKing(currentPlayerColor, board.getKingYPos(), board.getKingXPos())){
-                    System.out.println("Your King is in danger! you must move it or you lose.");
+            String playerColor = currentPlayer.getColor();
+
+            isKingCheck = !board.canKingMoveThere(playerColor, kingY, kingX);
+
+            System.out.println(currentPlayer.getName() + ", it's your turn!");
+
+            if (isKingCheck) {
+                System.out.println("Your King is in danger!");
+                System.out.println(board.getBoard());
+                while (isKingCheck) {
+                    System.out.println("Please enter letter for first piece to move.");
+                    System.out.print("Letter: ");
+                    String startY = scanner.next();
+
+                    System.out.println("Please enter number for first piece to move.");
+                    System.out.print("Number: ");
+                    int startX = scanner.nextInt();
+
+                    System.out.println("Please enter letter for where to move first piece to.");
+                    System.out.print("Letter: ");
+                    String endY = scanner.next();
+
+                    System.out.println("Please enter number for where to move first piece to.");
+                    System.out.print("Number: ");
+                    int endX = scanner.nextInt();
+
+                    if (board.canTakeTurn(currentPlayer, startY, startX, endY, endX)) {
+                        board.flipTheBoard(currentPlayer);
+                        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                        isKingCheck = board.canKingMoveThere(playerColor, kingY, kingX);
+                    } else {
+                        System.out.println("Invalid move, try again!");
+                        System.out.println(board.getBoard());
+                    }
+                }
+            } else {
+                System.out.println(board.getBoard());
+
+                System.out.println("Please enter letter for first piece to move.");
+                System.out.print("Letter: ");
+                String startY = scanner.next();
+
+                System.out.println("Please enter number for first piece to move.");
+                System.out.print("Number: ");
+                int startX = scanner.nextInt();
+
+                System.out.println("Please enter letter for where to move first piece to.");
+                System.out.print("Letter: ");
+                String endY = scanner.next();
+
+                System.out.println("Please enter number for where to move first piece to.");
+                System.out.print("Number: ");
+                int endX = scanner.nextInt();
+
+                if (board.canTakeTurn(currentPlayer, startY, startX, endY, endX)) {
+                    board.flipTheBoard(currentPlayer);
+                    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                } else {
+                    System.out.println("Please try again!");
                 }
             }
-
-            System.out.println(currentPlayer.getName() + ", please enter a starting X and Y position to select a piece to move,\nand a ending X and Y position to move the piece.");
-
-            System.out.print("Starting X: ");
-            int sX = scanner.nextInt();
-            System.out.print("Starting Y: ");
-            int sY = scanner.nextInt();
-            System.out.print("Ending X: ");
-            int eX = scanner.nextInt();
-            System.out.print("Ending Y: ");
-            int eY = scanner.nextInt();
-
-            if (board.makeMove(currentPlayer, sY, sX, eY, eX)){
-                currentPlayer = (currentPlayer == player1) ? player2 : player1;
-                currentPlayerColor = currentPlayer.getColor();
-            } else System.out.println("Try again!");
-
-            ++move;
         }
 
         System.out.print("Congratulations ");
 
-        if (currentPlayerColor.equals(player1.getColor())){
+        if (currentPlayer.getName().equals(player1.getColor())){
             System.out.print(player2.getName());
         } else {
             System.out.print(player1.getName());
@@ -60,52 +107,3 @@ class Main {
         System.out.print(", you have won!");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* writeToFile writeToFile = new writeToFile();
-
-    System.out.println(writeToFile.getText("input"));
-
-    writeToFile.writeText("hool", "input");
-    writeToFile.writeText("hool", "input");
-    writeToFile.writeText("hool", "input");
-    writeToFile.writeText("hool", "input");
-
-    System.out.println(writeToFile.getText("input"));*/
